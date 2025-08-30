@@ -4,6 +4,20 @@ import pandas as pd
 from dotenv import load_dotenv
 import os
 import requests
+import gdown
+import gdown
+import os
+import pickle
+
+def load_pickle_from_gdrive(file_id, filename):
+    if not os.path.exists(filename): 
+        url = f"https://drive.google.com/uc?id={file_id}"
+        gdown.download(url, filename, quiet=False)
+    return pickle.load(open(filename, "rb"))
+
+movies = load_pickle_from_gdrive("1CdfTziHgAriPtpEHJQhxD7oaEPHzFsI3", "movies.pkl")
+similarity = load_pickle_from_gdrive("1dKboYA2KQDE7xMI8_mozu5QUEGbcn0BL", "similarity.pkl")
+
 
 load_dotenv()
 api_key = os.getenv("api_key")
@@ -71,8 +85,7 @@ def recommend(movie):
         posters.append(fetch_poster(movie_id))
     return recommended_movies, posters
 
-movies = pickle.load(open('movies.pkl', 'rb'))
-similarity = pickle.load(open('similarity.pkl', 'rb'))
+
 
 st.set_page_config(layout="wide")
 st.title('Movie Recommender✨')
